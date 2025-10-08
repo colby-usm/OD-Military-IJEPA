@@ -1,5 +1,8 @@
 #!/usr/bin/env python3
 """
+2/4 preprocessing scripts
+
+
 Normalize COCO JSON for KIIT dataset:
 - Renames 'images[*].file_name' -> KIIT_<seq>.jpeg
 - Reassigns 'images[*].id' to a new sequential ID
