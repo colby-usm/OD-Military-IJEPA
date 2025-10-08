@@ -583,12 +583,6 @@
       "file_name": "KIIT_148.jpeg"
     },
     {
-      "width": 1333,
-      "height": 750,
-      "id": 98,
-      "file_name": "KIIT_149.jpeg"
-    },
-    {
       "width": 800,
       "height": 800,
       "id": 99,
@@ -9074,7 +9068,7 @@
     {
       "id": 258,
       "image_id": 83,
-      "category_id": 3,
+      "category_id": 2,
       "segmentation": [],
       "bbox": [
         525.8347978910369,
@@ -9089,7 +9083,7 @@
     {
       "id": 259,
       "image_id": 83,
-      "category_id": 7,
+      "category_id": 2,
       "segmentation": [],
       "bbox": [
         700.1757469244286,
@@ -9314,7 +9308,7 @@
     {
       "id": 274,
       "image_id": 89,
-      "category_id": 2,
+      "category_id": 6,
       "segmentation": [],
       "bbox": [
         291.03690685413034,
@@ -9464,7 +9458,7 @@
     {
       "id": 284,
       "image_id": 92,
-      "category_id": 7,
+      "category_id": 2,
       "segmentation": [],
       "bbox": [
         482.93774319066125,
@@ -9985,51 +9979,6 @@
       "ignore": 0,
       "iscrowd": 0,
       "area": 122146.1015996366
-    },
-    {
-      "id": 319,
-      "image_id": 98,
-      "category_id": 7,
-      "segmentation": [],
-      "bbox": [
-        423.5862516212716,
-        197.14656290531778,
-        204.01297016861207,
-        100.30263726761787
-      ],
-      "ignore": 0,
-      "iscrowd": 0,
-      "area": 20463.03894471164
-    },
-    {
-      "id": 320,
-      "image_id": 98,
-      "category_id": 6,
-      "segmentation": [],
-      "bbox": [
-        267.98313878080415,
-        338.9537397319499,
-        72.61478599221789,
-        57.06874189364463
-      ],
-      "ignore": 0,
-      "iscrowd": 0,
-      "area": 4144.034479452123
-    },
-    {
-      "id": 321,
-      "image_id": 98,
-      "category_id": 7,
-      "segmentation": [],
-      "bbox": [
-        228.21789883268482,
-        328.5776048421964,
-        143.50064850843057,
-        108.94941634241249
-      ],
-      "ignore": 0,
-      "iscrowd": 0,
-      "area": 15634.311899751197
     },
     {
       "id": 322,
@@ -10859,7 +10808,7 @@
     {
       "id": 377,
       "image_id": 116,
-      "category_id": 4,
+      "category_id": 7,
       "segmentation": [],
       "bbox": [
         199.64850615114187,
@@ -11744,7 +11693,7 @@
     {
       "id": 436,
       "image_id": 134,
-      "category_id": 6,
+      "category_id": 8,
       "segmentation": [],
       "bbox": [
         544.1124780316342,
@@ -13499,7 +13448,7 @@
     {
       "id": 553,
       "image_id": 169,
-      "category_id": 6,
+      "category_id": 1,
       "segmentation": [],
       "bbox": [
         147.66480581687856,
@@ -13510,21 +13459,6 @@
       "ignore": 0,
       "iscrowd": 0,
       "area": 440760.5995328631
-    },
-    {
-      "id": 554,
-      "image_id": 169,
-      "category_id": 6,
-      "segmentation": [],
-      "bbox": [
-        826.9229125745201,
-        416.16871704745165,
-        12.656983355732546,
-        11.247803163444644
-      ],
-      "ignore": 0,
-      "iscrowd": 0,
-      "area": 142.36325742827475
     },
     {
       "id": 555,
@@ -15689,7 +15623,7 @@
     {
       "id": 699,
       "image_id": 207,
-      "category_id": 2,
+      "category_id": 7,
       "segmentation": [],
       "bbox": [
         529.4421169258138,
@@ -16874,7 +16808,7 @@
     {
       "id": 778,
       "image_id": 220,
-      "category_id": 5,
+      "category_id": 3,
       "segmentation": [],
       "bbox": [
         240.4931041672845,
@@ -16904,7 +16838,7 @@
     {
       "id": 780,
       "image_id": 222,
-      "category_id": 6,
+      "category_id": 1,
       "segmentation": [],
       "bbox": [
         43.7638652798986,
@@ -23125,21 +23059,6 @@
       "ignore": 0,
       "iscrowd": 0,
       "area": 4765.952441417637
-    },
-    {
-      "id": 1195,
-      "image_id": 348,
-      "category_id": 7,
-      "segmentation": [],
-      "bbox": [
-        605.4646119452443,
-        375.75610028747036,
-        8.178664963263031,
-        4.673522836150312
-      ],
-      "ignore": 0,
-      "iscrowd": 0,
-      "area": 38.22317747503223
     },
     {
       "id": 1196,
