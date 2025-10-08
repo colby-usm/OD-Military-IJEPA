@@ -126,7 +126,7 @@ def main():
         annotated_img = draw_annotations(img.copy(), img_anns, categories) if img_anns else img.copy()
         
         # Display image info
-        print(f"{img_filename} - {len(img_anns)} annotations")
+        print(f"{img_filename} - {len(img_anns)} annotations: image id: {img_id}")
         cv2.imshow('COCO Dataset Viewer', annotated_img)
         
         # Wait for key press; break if 'q'
