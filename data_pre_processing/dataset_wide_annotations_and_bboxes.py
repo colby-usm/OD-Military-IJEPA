@@ -59,8 +59,8 @@ def draw_annotations(img, annotations, categories):
 def main():
     global current_img, annotated_img, current_filename
     
-    annotation_file = 'annotations.json'
-    image_dir = 'images'
+    annotation_file = 'KIIT/annotations.json'
+    image_dir = 'KIIT/images'
     
     # Load COCO annotations
     print("Loading COCO annotations...")
@@ -83,31 +83,21 @@ def main():
         img_to_anns[img_id].append(ann)
     
     print(f"Loaded {len(images)} images and {len(annotations)} annotations")
-    print("Hover over image to see coordinates and pixel values")
-    print("Enter an integer to select an image (KIIT_<num>.jpeg), or 'q' to quit.\n")
+    print("Press SPACE to move to next image, Q to quit.\n")
     
     # Create window and set mouse callback
     cv2.namedWindow('COCO Dataset Viewer')
     cv2.setMouseCallback('COCO Dataset Viewer', show_coords)
-    
-    while True:
-        user_input = input("Enter image number (or 'q' to quit): ").strip()
-        if user_input.lower() == 'q':
-            print("Quitting...")
-            break
-        if not user_input.isdigit():
-            print("Invalid input. Please enter an integer or 'q' to quit.")
-            continue
-        
-        img_number = int(user_input)
-        img_filename = f"KIIT_{img_number}.jpeg"
+
+    # Iterate over all images
+    for img_info in images:
+        img_filename = img_info['file_name']
         img_path = os.path.join(image_dir, img_filename)
         
         if not os.path.exists(img_path):
             print(f"Image not found: {img_path}")
             continue
         
-        # Load image
         img = cv2.imread(img_path)
         if img is None:
             print(f"Failed to load image: {img_path}")
@@ -116,24 +106,27 @@ def main():
         current_img = img.copy()
         current_filename = img_filename
         
-        # Get annotations if available
-        img_id = filename_to_id.get(img_filename)
-        img_anns = img_to_anns.get(img_id, []) if img_id is not None else []
+        # Get annotations for this image
+        img_id = img_info['id']
+        img_anns = img_to_anns.get(img_id, [])
         
         # Draw annotations
-        if img_anns:
-            annotated_img = draw_annotations(img.copy(), img_anns, categories)
-        else:
-            annotated_img = img.copy()
+        annotated_img = draw_annotations(img.copy(), img_anns, categories) if img_anns else img.copy()
         
         print(f"{img_filename} - {len(img_anns)} annotations")
         cv2.imshow('COCO Dataset Viewer', annotated_img)
         
-        key = cv2.waitKey(0) & 0xFF
-        if key == ord('q'):
-            print("Quitting...")
-            break
+        # Wait for key input
+        while True:
+            key = cv2.waitKey(0) & 0xFF
+            if key == ord(' '):  # spacebar → next image
+                break
+            elif key == ord('q'):  # q → quit
+                print("Quitting...")
+                cv2.destroyAllWindows()
+                return
 
+    print("Reached end of dataset.")
     cv2.destroyAllWindows()
 
 if __name__ == "__main__":
