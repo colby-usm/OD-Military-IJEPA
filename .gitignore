@@ -1,2 +1,10 @@
-KIIT_bckp/*
-KIIT/image_data/*
+KIIT_bckp/
+KIIT/image_data/
+
+__pycache__/
+*.pyc
+
+.venv/
+
+*.swp
+*.swo
