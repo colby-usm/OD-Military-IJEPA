@@ -15,20 +15,20 @@ from .backbone import build_backbone
 from .matcher import build_matcher
 from .segmentation import (DETRsegm, PostProcessPanoptic, PostProcessSegm,
                            dice_loss, sigmoid_focal_loss)
-from .transformer import build_transformer
+from .transformer import build_decoder_only
 
 
-from ijepa.src.models.vision_transformer import VisionTransformer
+from ijepa.src.models.vision_transformer import VisionTransformer, vit_huge
 
 
-class VIT_DETR(nn.Module):
+class VitDetr(nn.Module):
     """ This is the VIT DETR module that performs object detection """
-    def __init__(self, vit: VisionTransformer, transformer, num_classes, num_queries, aux_loss=False):
+    def __init__(self, vit: VisionTransformer,decoder: nn.TransformerDecoder, num_classes, num_queries, aux_loss=False):
         """ Initializes the model.
         Parameters:
             vit: the VIT encoder
-            backbone: torch module of the backbone to be used. See backbone.py
-            transformer: torch module of the transformer architecture. See transformer.py
+            decoder : Transfomrer Decoder
+
             num_classes: number of object classes
             num_queries: number of object queries, ie detection slot. This is the maximal number of objects
                          DETR can detect in a single image. For COCO, we recommend 100 queries.
@@ -38,6 +38,7 @@ class VIT_DETR(nn.Module):
         self.num_queries = num_queries
 
 
+        self.transformer_decoder = decoder
         self.vit = vit
 
 
@@ -75,17 +76,12 @@ class VIT_DETR(nn.Module):
 
         # --- does this return the correct elements?
 
-
-
-
-
-
         src, mask = features[-1].decompose()
         assert mask is not None
-        hs = self.transformer(self.input_proj(src), mask, self.query_embed.weight, pos[-1])[0]
+        hidden_states = self.decoder(self.input_proj(src), mask, self.query_embed.weight, pos[-1])[0]
 
-        outputs_class = self.class_embed(hs)
-        outputs_coord = self.bbox_embed(hs).sigmoid()
+        outputs_class = self.class_embed(hidden_states)
+        outputs_coord = self.bbox_embed(hidden_states).sigmoid()
         out = {'pred_logits': outputs_class[-1], 'pred_boxes': outputs_coord[-1]}
         if self.aux_loss:
             out['aux_outputs'] = self._set_aux_loss(outputs_class, outputs_coord)
@@ -330,32 +326,27 @@ def build(args):
     # you should pass `num_classes` to be 2 (max_obj_id + 1).
     # For more details on this, check the following discussion
     # https://github.com/facebookresearch/detr/issues/108#issuecomment-650269223
+
     num_classes = 20 if args.dataset_file != 'coco' else 91
-    if args.dataset_file == "coco_panoptic":
-        # for panoptic, we just add a num_classes that is large enough to hold
-        # max_obj_id + 1, but the exact value doesn't really matter
-        num_classes = 250
     device = torch.device(args.device)
 
-    backbone = build_backbone(args)
+    assert 1 == 0, "We need to parse the args to get the config for the decoder"
+    decoder = build_decoder_only(args)
 
-    transformer = build_transformer(args)
+    assert 1 == 0, "We need to parse the args to get the config for the vit_h"
+    vit = vit_huge(args)
 
-    model = DETR(
-        backbone,
-        transformer,
+    model = VitDetr(
+        vit=vit,
+        decoder=decoder,
         num_classes=num_classes,
         num_queries=args.num_queries,
         aux_loss=args.aux_loss,
     )
-    if args.masks:
-        model = DETRsegm(model, freeze_detr=(args.frozen_weights is not None))
     matcher = build_matcher(args)
     weight_dict = {'loss_ce': 1, 'loss_bbox': args.bbox_loss_coef}
     weight_dict['loss_giou'] = args.giou_loss_coef
-    if args.masks:
-        weight_dict["loss_mask"] = args.mask_loss_coef
-        weight_dict["loss_dice"] = args.dice_loss_coef
+
     # TODO this is a hack
     if args.aux_loss:
         aux_weight_dict = {}
@@ -364,16 +355,10 @@ def build(args):
         weight_dict.update(aux_weight_dict)
 
     losses = ['labels', 'boxes', 'cardinality']
-    if args.masks:
-        losses += ["masks"]
+
     criterion = SetCriterion(num_classes, matcher=matcher, weight_dict=weight_dict,
                              eos_coef=args.eos_coef, losses=losses)
     criterion.to(device)
     postprocessors = {'bbox': PostProcess()}
-    if args.masks:
-        postprocessors['segm'] = PostProcessSegm()
-        if args.dataset_file == "coco_panoptic":
-            is_thing_map = {i: i <= 90 for i in range(201)}
-            postprocessors["panoptic"] = PostProcessPanoptic(is_thing_map, threshold=0.85)
 
     return model, criterion, postprocessors

@@ -295,3 +295,8 @@ def _get_activation_fn(activation):
     if activation == "glu":
         return F.glu
     raise RuntimeError(F"activation should be relu/gelu, not {activation}.")
+
+
+
+def build_decoder_only():
+    assert 1 == 0, "Implement build_decoder_only function"
